@@ -21,7 +21,10 @@ class AlienInvasion:
 
         # Set the screen dimensions and caption for display
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+        self.icon = pygame.image.load('images/alien.png')
+
         pygame.display.set_caption("LGames - Alien Invasion")
+        pygame.display.set_icon(self.icon)
 
         # Pass the alienInvasion instance(self) to Ship, 
         # so Ship can access the game's resource
@@ -38,21 +41,34 @@ class AlienInvasion:
     def check_events(self):
         """Respond to keypresses and mouse events."""
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            # Use elif since we only check the condition of one key each time
-            # If a statement(condition) equals true, jump through others
-            # presses/unpressed?, left/right?
+            self.check_quit_event(event)
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:
-                    self.ship.moving_right = True
-                elif event.key == pygame.K_LEFT:
-                    self.ship.moving_left = True
+                self.check_keydown_events(event)
             elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_RIGHT:
-                    self.ship.moving_right = False
-                elif event.key == pygame.K_LEFT:
-                    self.ship.moving_left = False
+                self.check_keyup_events(event)
+
+    def check_quit_event(self, event):
+        """Response to quit command"""
+        if event.type == pygame.QUIT:
+                sys.exit()
+
+    def check_keydown_events(self, event):
+        """Response to key press"""
+        # Use elif since we only check the condition of one key each time
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = True
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = True
+        elif event.key == pygame.K_q:
+            sys.exit()
+
+    def check_keyup_events(self, event):
+        """Response to key up"""
+        # Use elif since we only check the condition of one key each time
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = False
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
 
     def update_screen(self):
         """Update the screen"""

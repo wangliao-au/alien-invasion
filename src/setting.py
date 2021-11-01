@@ -8,5 +8,5 @@ class Settings:
         self.bg_color = (0, 0, 0)
 
         # Ships settings
-        # When the ship moves, 1.5 pixels / pass
-        self.ship_speed = 5
+        # When the ship moves, 3 pixels / pass
+        self.ship_speed = 3
