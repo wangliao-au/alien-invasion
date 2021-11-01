@@ -40,7 +40,10 @@ class AlienInvasion:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
+            # Use elif since we only check the condition of one key each time
+            # If a statement(condition) equals true, jump through others
+            # presses/unpressed?, left/right?
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
                     self.ship.moving_right = True
                 elif event.key == pygame.K_LEFT:
