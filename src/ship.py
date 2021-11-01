@@ -1,3 +1,4 @@
+from sys import flags
 import pygame
 
 class Ship:
@@ -6,6 +7,8 @@ class Ship:
         """Initialize the ship and set its starting position."""
         # Assign the screen
         self.screen = ai_game.screen
+        self.settings = ai_game.settings
+
         # Get the background rect, as to place the ship
         self.screen_rect = ai_game.screen.get_rect()
 
@@ -17,16 +20,23 @@ class Ship:
         # Start each new ship at the bottom center of the screen.
         self.rect.midbottom = self.screen_rect.midbottom
     
+        # Store a float value for the ship's horizontal position.
+        self.horizon = float(self.rect.x)
+
         # Movement flag, default False
         self.moving_right = False
         self.moving_left = False
 
     def update(self):
         """Update the ship's position based on the movement flag."""
+        # Update the ship's x value
         if self.moving_right:
-            self.rect.x += 1
+            self.horizon += self.settings.ship_speed
         if self.moving_left:
-            self.rect.x -= 1
+            self.horizon -= self.settings.ship_speed
+
+        # Update rect object from self.x
+        self.rect.x = self.horizon
 
     def blitme(self):
         """Draw the ship at its current location."""
