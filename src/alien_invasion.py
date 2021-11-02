@@ -40,16 +40,16 @@ class AlienInvasion:
         self.play_button = Button(self, "Play")
 
     def check_events(self):
-            """Respond to keypresses and mouse events."""
-            for event in pygame.event.get():
-                self.check_quit_event(event)
-                if event.type == pygame.MOUSEBUTTONUP:
-                    mouse_pos = pygame.mouse.get_pos()
-                    self.check_play_button(mouse_pos)
-                elif event.type == pygame.KEYDOWN:
-                    self.check_keydown_events(event)
-                elif event.type == pygame.KEYUP:
-                    self.check_keyup_events(event)
+        """Respond to keypresses and mouse events."""
+        for event in pygame.event.get():
+            self.check_quit_event(event)
+            if event.type == pygame.MOUSEBUTTONUP:
+                mouse_pos = pygame.mouse.get_pos()
+                self.check_play_button(mouse_pos)
+            elif event.type == pygame.KEYDOWN:
+                self.check_keydown_events(event)
+            elif event.type == pygame.KEYUP:
+                self.check_keyup_events(event)
 
     def check_quit_event(self, event):
         """Response to quit command"""
@@ -75,6 +75,10 @@ class AlienInvasion:
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
+        elif event.key == pygame.K_UP:
+            self.ship.moving_up = True
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = True
         elif event.key == pygame.K_q:
             sys.exit()
         elif event.key == pygame.K_SPACE:
@@ -87,6 +91,10 @@ class AlienInvasion:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
+        elif event.key == pygame.K_UP:
+            self.ship.moving_up = False
+        elif event.key == pygame.K_DOWN:
+            self.ship.moving_down = False
 
     def update_ufos(self):
         """Update the positions of all ufos in the fleet."""
@@ -130,13 +138,13 @@ class AlienInvasion:
         pygame.display.flip()
 
     def create_ufos(self, i, row):
-            # Create an alien and place it in the row.
-            ufo = Ufo(self)
-            ufo_width, ufo_height = ufo.rect.size
-            ufo.horizon = ufo_width + 2 * ufo_width * i
-            ufo.rect.x = ufo.horizon
-            ufo.rect.y = ufo_height + 2 * ufo_height * row
-            self.ufos.add(ufo)
+        # Create an alien and place it in the row.
+        ufo = Ufo(self)
+        ufo_width, ufo_height = ufo.rect.size
+        ufo.horizon = ufo_width + 2 * ufo_width * i
+        ufo.rect.x = ufo.horizon
+        ufo.rect.y = ufo_height + 2 * ufo_height * row
+        self.ufos.add(ufo)
 
     def create_fleet(self):
         """Create a fleet of ufos."""

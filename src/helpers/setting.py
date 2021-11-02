@@ -8,6 +8,8 @@ class Settings:
         self.bg_color = (0, 0, 0)
         
         self.ship_limit = 3
+        self.bullet_width = 6
+        self.bullet_stored = 10
 
         self.bullet_height = 15
         self.bullet_color = (200, 60, 60)

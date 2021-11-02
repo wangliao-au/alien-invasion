@@ -1,3 +1,5 @@
+from sys import flags
+from time import sleep
 import pygame
 
 class Ship:
@@ -21,10 +23,13 @@ class Ship:
     
         # Store a float value for the ship's horizontal position.
         self.horizon = float(self.rect.x)
+        self.vertical = float(self.rect.y)
 
         # Movement flag, default False
         self.moving_right = False
         self.moving_left = False
+        self.moving_up = False
+        self.moving_down = False
 
     def update(self):
         """Update the ship's position based on the movement flag."""
@@ -33,9 +38,14 @@ class Ship:
             self.horizon += self.settings.ship_speed
         if self.moving_left and self.rect.left > 0:
             self.horizon -= self.settings.ship_speed
+        if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
+            self.vertical += self.settings.ship_speed
+        if self.moving_up and self.rect.top > 0:
+            self.vertical -= self.settings.ship_speed
 
         # Update rect object from self.x
         self.rect.x = self.horizon
+        self.rect.y = self.vertical
 
     def blitme(self):
         """Draw the ship at its current location."""
@@ -45,3 +55,4 @@ class Ship:
         """Center the ship on the screen."""
         self.rect.midbottom = self.screen_rect.midbottom
         self.horizon = float(self.rect.x)
+        self.vertical = float(self.rect.y)
