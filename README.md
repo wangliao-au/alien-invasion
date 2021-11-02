@@ -1,6 +1,10 @@
 # Alien-Invasion
   A simple game project in python with pygame, inspiried by  **Python Crash Course**
   
+## Demo
+
+https://user-images.githubusercontent.com/91665750/139912351-8835208c-624b-4a3f-932c-8b890dd4fe2e.mov
+
 ## How to play the game
 - Install pygame using ```pip3 install pygame``` in the terminal
 - Go to the main folder Alien-Invasion, enter ```python3 alien_invasion_player.py``` in the terminal to start the game
@@ -18,7 +22,5 @@ The player shoots and destroys the aliens.
 - If any alien hits the player’s ship or reaches the bottom of the screen, the player loses a ship. 
 - If the player loses three ships, the game ends.
 
-# Demo
 
-https://user-images.githubusercontent.com/91665750/139912351-8835208c-624b-4a3f-932c-8b890dd4fe2e.mov
 
