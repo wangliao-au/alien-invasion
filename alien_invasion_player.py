@@ -4,9 +4,9 @@ Powered and inspired by <Python Crash Course>
 """
 import pygame
 
-from src.helper import Helper
+from src.alien_invasion import AlienInvasion
 
-class AlienInvasion(Helper):
+class Run(AlienInvasion):
     """Overall class to manage game assets and behavior"""
     def run_game(self):
         """Start the main loop for the game"""
@@ -22,5 +22,5 @@ class AlienInvasion(Helper):
 
 if __name__ == '__main__':
     # Make a game instance and run the game.
-    ai = AlienInvasion()
+    ai = Run()
     ai.run_game()

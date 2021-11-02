@@ -6,11 +6,11 @@ from time import sleep
 from src.setting import Settings
 from src.game_stats import GameStats
 
-from objects.ship import Ship
-from objects.bullet import Bullet
-from objects.ufo import Ufo
+from src.objects.ship import Ship
+from src.objects.bullet import Bullet
+from src.objects.ufo import Ufo
 
-class Helper:
+class AlienInvasion:
     def __init__(self):
         """Initialize the game and create fame resources"""
         pygame.init()
