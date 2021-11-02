@@ -43,7 +43,7 @@ class AlienInvasion:
             """Respond to keypresses and mouse events."""
             for event in pygame.event.get():
                 self.check_quit_event(event)
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.MOUSEBUTTONUP:
                     mouse_pos = pygame.mouse.get_pos()
                     self.check_play_button(mouse_pos)
                 elif event.type == pygame.KEYDOWN:
@@ -58,8 +58,17 @@ class AlienInvasion:
 
     def check_play_button(self, mouse_pos):
         """Start a new game when the player clicks Play."""
-        if self.play_button.rect.collidepoint(mouse_pos):
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.stats.game_run:
+            # Reset the game statistics.
+            self.stats.reset_stats()
             self.stats.game_run = True
+            self.ufos.empty()
+            self.bullets.empty()
+            
+            # Create a new fleet snd center the ship.
+            self.create_fleet()
+            self.ship.center_ship()
 
     def check_keydown_events(self, event):
         """Response to key press"""
@@ -176,13 +185,26 @@ class AlienInvasion:
 
         # If ufos are all destroyed
         if not self.ufos:
-            # Increase the fleet drop speed for the next fleet.
-            self.settings.fleet_drop_speed += 10
-
+            self.ufo_level_up()            
+            self.ship_level_up()
             # Get rid of eisiting bullets and create new fleet.
             self.bullets.empty()
             self.create_fleet()
 
+    def ufo_level_up(self):
+        """Ufos become stronger."""
+        self.settings.fleet_drop_speed += self.settings.fleet_increase_drop_speed
+        self.settings.ufo_speed += self.settings.ufo_increase_speed
+
+    def ship_level_up(self):
+        """Ship becomes stronger."""
+        self.settings.ship_limit += self.settings.ship_increase_hp
+        self.settings.ship_speed += self.settings.ship_increase_speed
+        self.settings.bullet_width *= self.settings.bullet_increase_width
+        self.settings.bullet_stored += self.settings.bullet_increase_store
+        self.settings.bullet_speed += self.settings.bullet_increase_speed
+
+            
     def ship_hit(self):
         """Respond to the ship being hit by an ufo."""
         if self.stats.ships_left > 0:
