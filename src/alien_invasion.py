@@ -3,8 +3,8 @@ import sys
 
 from time import sleep
 
-from src.setting import Settings
-from src.game_stats import GameStats
+from src.helpers.setting import Settings
+from src.helpers.game_stats import GameStats
 
 from src.objects.ship import Ship
 from src.objects.bullet import Bullet
