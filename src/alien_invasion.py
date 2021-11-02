@@ -158,6 +158,9 @@ class AlienInvasion:
 
         # If ufos are all destroyed
         if not self.ufos:
+            # Increase the fleet drop speed for the next fleet.
+            self.settings.fleet_drop_speed += 10
+
             # Get rid of eisiting bullets and create new fleet.
             self.bullets.empty()
             self.create_fleet()
