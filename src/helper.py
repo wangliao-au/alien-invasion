@@ -41,9 +41,29 @@ class Helper:
 
     def create_fleet(self):
         """Create a fleet of ufos."""
-        # Make an ufo.
+        # Make an ufo and find the number of ufos in a row.
+        # Spacing between each ufo is equal to half ufo width.
         new_ufo = Ufo(self)
-        self.ufos.add(new_ufo)
+        ufo_width, ufo_height = new_ufo.rect.size
+        between_ufo =  1.69
+        num_ufos = self.settings.screen_width // (ufo_width * between_ufo) + 1 # // returns an integer
+
+        # Determine the number of rows of ufos that fit on the screen.
+        ship_height = self.ship.rect.height
+        space_y = (self.settings.screen_height - (4 * ufo_height) - ship_height)
+        num_rows = space_y // (2 * ufo_height)
+
+        # Create the full fleet of aliens.
+        for row in range(num_rows):
+            for i in range(int(num_ufos)):
+                self.create_ufos(i, ufo_width, row, between_ufo)
+
+    def create_ufos(self, i, width, row, between):
+            new_ufo = Ufo(self)
+            new_ufo.x = i * width * between
+            new_ufo.rect.x = new_ufo.x
+            new_ufo.rect.y = new_ufo.rect.height + 2 * new_ufo.rect.height * row
+            self.ufos.add(new_ufo)
 
     def fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
