@@ -1,5 +1,5 @@
 # Alien-Invasion
-  A simple python game project inspiried by  **Python Crash Course**
+  A simple game project in python with pygame, inspiried by  **Python Crash Course**
   
 ## How to play the game
 - Install pygame using ```pip3 install pygame``` in the terminal
