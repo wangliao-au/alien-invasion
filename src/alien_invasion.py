@@ -60,20 +60,18 @@ class AlienInvasion:
         """Start a new game when the player clicks Play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_run:
-            # Reset the game statistics.
-            self.stats.reset_stats()
-            self.stats.game_run = True
-            self.ufos.empty()
-            self.bullets.empty()
-            
-            # Create a new fleet snd center the ship.
-            self.create_fleet()
-            self.ship.center_ship()
+            self.settings.initialize_dynamic_settings()
+            self.start_the_game()
+            # Hide the mouse cursor.
+            pygame.mouse.set_visible(False)
 
     def check_keydown_events(self, event):
         """Response to key press"""
         # Use elif since we only check the condition of one key each time
-        if event.key == pygame.K_RIGHT:
+        if event.key == pygame.K_p and not self.stats.game_run:
+            self.settings.initialize_dynamic_settings()
+            self.start_the_game()
+        elif event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
@@ -185,25 +183,12 @@ class AlienInvasion:
 
         # If ufos are all destroyed
         if not self.ufos:
-            self.ufo_level_up()            
-            self.ship_level_up()
             # Get rid of eisiting bullets and create new fleet.
             self.bullets.empty()
             self.create_fleet()
 
-    def ufo_level_up(self):
-        """Ufos become stronger."""
-        self.settings.fleet_drop_speed += self.settings.fleet_increase_drop_speed
-        self.settings.ufo_speed += self.settings.ufo_increase_speed
-
-    def ship_level_up(self):
-        """Ship becomes stronger."""
-        self.settings.ship_limit += self.settings.ship_increase_hp
-        self.settings.ship_speed += self.settings.ship_increase_speed
-        self.settings.bullet_width *= self.settings.bullet_increase_width
-        self.settings.bullet_stored += self.settings.bullet_increase_store
-        self.settings.bullet_speed += self.settings.bullet_increase_speed
-
+            self.settings.ufo_level_up()            
+            self.settings.ship_level_up()
             
     def ship_hit(self):
         """Respond to the ship being hit by an ufo."""
@@ -222,6 +207,7 @@ class AlienInvasion:
             sleep(2)
         else:
             self.stats.game_run = False
+            pygame.mouse.set_visible(True)
 
     def check_ufos_bottom(self):
         """Check if any ufos have reached the bottom of screen."""
@@ -230,3 +216,14 @@ class AlienInvasion:
             if ufo.rect.bottom >= screen_rect.bottom:
                 self.ship_hit()
                 break
+
+    def start_the_game(self):
+        # Reset the game statistics.
+        self.stats.reset_stats()
+        self.stats.game_run = True
+        self.ufos.empty()
+        self.bullets.empty()
+        
+        # Create a new fleet snd center the ship.
+        self.create_fleet()
+        self.ship.center_ship()
