@@ -18,7 +18,6 @@ class AlienInvasion(Helper):
         # Set the screen dimensions and caption for display
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         self.icon = pygame.image.load('images/alien.png')
-
         pygame.display.set_caption("LGames - Alien Invasion")
         pygame.display.set_icon(self.icon)
 
@@ -27,6 +26,9 @@ class AlienInvasion(Helper):
         # assign the Ship instance to self.ship
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.ufos = pygame.sprite.Group()
+
+        self.create_fleet()
 
     def run_game(self):
         """Start the main loop for the game"""

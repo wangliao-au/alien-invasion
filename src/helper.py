@@ -2,6 +2,7 @@ import pygame
 import sys
 
 from bullet import Bullet
+from ufo import Ufo
 
 class Helper:
     def check_events(self):
@@ -38,6 +39,12 @@ class Helper:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
+    def create_fleet(self):
+        """Create a fleet of ufos."""
+        # Make an ufo.
+        new_ufo = Ufo(self)
+        self.ufos.add(new_ufo)
+
     def fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullet_stored:
@@ -62,6 +69,8 @@ class Helper:
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        
+        self.ufos.draw(self.screen)
 
         # Update the surface
         pygame.display.flip()
