@@ -3,8 +3,11 @@ import sys
 
 from time import sleep
 
+from pygame import mouse
+
 from src.helpers.setting import Settings
 from src.helpers.game_stats import GameStats
+from src.helpers.button import Button
 
 from src.objects.ship import Ship
 from src.objects.bullet import Bullet
@@ -33,11 +36,17 @@ class AlienInvasion:
 
         self.create_fleet()
 
+        # Make the play button.
+        self.play_button = Button(self, "Play")
+
     def check_events(self):
             """Respond to keypresses and mouse events."""
             for event in pygame.event.get():
                 self.check_quit_event(event)
-                if event.type == pygame.KEYDOWN:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    self.check_play_button(mouse_pos)
+                elif event.type == pygame.KEYDOWN:
                     self.check_keydown_events(event)
                 elif event.type == pygame.KEYUP:
                     self.check_keyup_events(event)
@@ -46,6 +55,11 @@ class AlienInvasion:
         """Response to quit command"""
         if event.type == pygame.QUIT:
                 sys.exit()
+
+    def check_play_button(self, mouse_pos):
+        """Start a new game when the player clicks Play."""
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self.stats.game_run = True
 
     def check_keydown_events(self, event):
         """Response to key press"""
@@ -100,6 +114,10 @@ class AlienInvasion:
             bullet.draw_bullet()
         
         self.ufos.draw(self.screen)
+
+        # If the game is inactive, draw the play button.
+        if not self.stats.game_run:
+            self.play_button.draw_button()
 
         # Update the surface
         pygame.display.flip()
