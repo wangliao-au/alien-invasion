@@ -3,14 +3,14 @@ import sys
 
 from time import sleep
 
-from src.helpers.setting import Settings
-from src.helpers.game_stats import GameStats
-from src.helpers.button import Button
-from src.helpers.scoreboard import Scoredboard
+from src.settings.setting import Settings
+from src.settings.game_stats import GameStats
 
 from src.objects.ship import Ship
 from src.objects.bullet import Bullet
 from src.objects.ufo import Ufo
+from src.objects.button import Button
+from src.objects.scoreboard import Scoredboard
 
 class AlienInvasion:
     def __init__(self):
