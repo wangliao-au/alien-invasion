@@ -76,8 +76,9 @@ class AlienInvasion:
 
     def fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullet_stored:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
     def delete_out_screen_bullets(self):
         """An approch to remove the out-screen bullets."""
