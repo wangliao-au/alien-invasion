@@ -1,6 +1,9 @@
 import pygame
 import sys
 
+from pygame import rect
+from pygame.constants import WINDOWCLOSE, WINDOWHITTEST
+
 from bullet import Bullet
 from ufo import Ufo
 
@@ -45,32 +48,52 @@ class Helper:
         # Spacing between each ufo is equal to half ufo width.
         new_ufo = Ufo(self)
         ufo_width, ufo_height = new_ufo.rect.size
-        between_ufo =  1.69
-        num_ufos = self.settings.screen_width // (ufo_width * between_ufo) + 1 # // returns an integer
+        available_space_x = self.settings.screen_width - (2 * ufo_width)
+        num_ufos = available_space_x // (2 * ufo_width) # // returns an integer
 
         # Determine the number of rows of ufos that fit on the screen.
         ship_height = self.ship.rect.height
-        space_y = (self.settings.screen_height - (4 * ufo_height) - ship_height)
+        space_y = (self.settings.screen_height - (3 * ufo_height) - ship_height)
         num_rows = space_y // (2 * ufo_height)
 
         # Create the full fleet of aliens.
         for row in range(num_rows):
-            for i in range(int(num_ufos)):
-                self.create_ufos(i, ufo_width, row, between_ufo)
+            for i in range(num_ufos):
+                self.create_ufos(i, row)
 
-    def create_ufos(self, i, width, row, between):
-            new_ufo = Ufo(self)
-            new_ufo.x = i * width * between
-            new_ufo.rect.x = new_ufo.x
-            new_ufo.rect.y = new_ufo.rect.height + 2 * new_ufo.rect.height * row
-            self.ufos.add(new_ufo)
+    def check_fleet_edges(self):
+        """Respond if any ufos have reached an edge."""
+        for ufo in self.ufos.sprites():
+            if ufo.is_hit_edges():
+                self.change_fleet_direction()
+                break
+    
+    def change_fleet_direction(self):
+        """Drop the entire fleet and change the fleet's direction."""
+        for ufo in self.ufos.sprites():
+            ufo.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
+
+    def create_ufos(self, i, row):
+            # Create an alien and place it in the row.
+            ufo = Ufo(self)
+            ufo_width, ufo_height = ufo.rect.size
+            ufo.horizon = ufo_width + 2 * ufo_width * i
+            ufo.rect.x = ufo.horizon
+            ufo.rect.y = ufo_height + 2 * ufo_height * row
+            self.ufos.add(ufo)
+
+    def update_ufos(self):
+        """Update the positions of all ufos in the fleet."""
+        self.check_fleet_edges()
+        self.ufos.update()
 
     def fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullet_stored:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
-
+    
     def update_bullets(self):
         """Update the bullets"""
         self.bullets.update()
@@ -79,7 +102,9 @@ class Helper:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-        # print(len(self.bullets)) To see the bullets being removed.
+        
+        # Check if the bullet hit an ufo, get rid of the ufo if so.
+        collisions = pygame.sprite.groupcollide(self.bullets, self.ufos, True, True)
 
     def update_screen(self):
         """Update the screen"""

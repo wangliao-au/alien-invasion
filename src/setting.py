@@ -17,3 +17,9 @@ class Settings:
         self.bullet_height = 15
         self.bullet_color = (200, 60, 60)
         self.bullet_stored = 10
+
+        # Ufo settings
+        self.ufo_speed = 1.0
+        self.fleet_drop_speed = 1.0
+        # fleet_direction of 1 represents right; -1 represents left.
+        self.fleet_direction = 1

@@ -36,6 +36,7 @@ class AlienInvasion(Helper):
             self.check_events()
             self.ship.update()
             self.update_bullets()
+            self.update_ufos()
             self.update_screen()
 
 if __name__ == '__main__':
