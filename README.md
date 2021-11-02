@@ -2,10 +2,10 @@
   A simple python game project inspiried by  **Python Crash Course**
   
 ## How to play the game
-- Install pygame using ```pip3 install pygame```
-- Enter ```python3 alien_invasion_player.py``` to start the game
+- Install pygame using ```pip3 install pygame``` in the terminal
+- Go to the main folder Alien-Invasion, enter ```python3 alien_invasion_player.py``` in the terminal to start the game
 
-# Overview
+## Game Overview
 In Alien Invasion, the player controls a rocket ship that appears at the bottom center of the screen. 
 The player can move the ship right and left using the arrow keys and shoot bullets using the spacebar.
 
