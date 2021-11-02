@@ -4,10 +4,9 @@ Powered and inspired by <Python Crash Course>
 """
 import sys
 
-from pygame.version import vernum
-
 from setting import Settings
 from ship import Ship
+from bullet import Bullet
 
 import pygame
 from pygame.constants import NOFRAME
@@ -30,12 +29,14 @@ class AlienInvasion:
         # so Ship can access the game's resource
         # assign the Ship instance to self.ship
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
 
     def run_game(self):
         """Start the main loop for the game"""
         while True:
             self.check_events()
             self.ship.update()
+            self.bullets.update()
             self.update_screen()
 
     def check_events(self):
@@ -61,6 +62,8 @@ class AlienInvasion:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
             sys.exit()
+        elif event.key == pygame.K_SPACE:
+            self.fire_bullet()
 
     def check_keyup_events(self, event):
         """Response to key up"""
@@ -70,12 +73,19 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
+    def fire_bullet(self):
+        """Create a new bullet and add it to the bullets group."""
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
+
     def update_screen(self):
         """Update the screen"""
         # Redraw the screen with background color
         self.screen.fill(self.settings.bg_color)
         # Draw the ship, at the current location
         self.ship.blitme()
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
 
         # Update the surface
         pygame.display.flip()
