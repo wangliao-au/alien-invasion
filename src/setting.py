@@ -10,6 +10,7 @@ class Settings:
         # Ships settings
         # When the ship moves, 3 pixels / pass
         self.ship_speed = 3
+        self.ship_limit = 3
 
         # Bullet settings
         self.bullet_speed = 3.0
@@ -19,7 +20,7 @@ class Settings:
         self.bullet_stored = 10
 
         # Ufo settings
-        self.ufo_speed = 1.0
-        self.fleet_drop_speed = 1.0
+        self.ufo_speed = 10
+        self.fleet_drop_speed = 50
         # fleet_direction of 1 represents right; -1 represents left.
         self.fleet_direction = 1
