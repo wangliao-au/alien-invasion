@@ -3,11 +3,10 @@ import sys
 
 from time import sleep
 
-from pygame import mouse
-
 from src.helpers.setting import Settings
 from src.helpers.game_stats import GameStats
 from src.helpers.button import Button
+from src.helpers.scoreboard import Scoredboard
 
 from src.objects.ship import Ship
 from src.objects.bullet import Bullet
@@ -34,11 +33,13 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.ufos = pygame.sprite.Group()
 
-        self.create_fleet()
-
         # Make the play button.
         self.play_button = Button(self, "Play")
+        # Make the scoreboard.
+        self.sb = Scoredboard(self)
 
+        self.create_fleet()
+    
     def check_events(self):
         """Respond to keypresses and mouse events."""
         for event in pygame.event.get():
@@ -61,7 +62,7 @@ class AlienInvasion:
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_run:
             self.settings.initialize_dynamic_settings()
-            self.start_the_game()
+            self.start_new_game()
             # Hide the mouse cursor.
             pygame.mouse.set_visible(False)
 
@@ -70,7 +71,7 @@ class AlienInvasion:
         # Use elif since we only check the condition of one key each time
         if event.key == pygame.K_p and not self.stats.game_run:
             self.settings.initialize_dynamic_settings()
-            self.start_the_game()
+            self.start_new_game()
         elif event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
@@ -123,16 +124,19 @@ class AlienInvasion:
         """Update the screen"""
         # Redraw the screen with background color
         self.screen.fill(self.settings.bg_color)
-        # Draw the ship, at the current location
+
+        # Draw the ship, ufos, bullets
         self.ship.blitme()
+        self.ufos.draw(self.screen)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-        
-        self.ufos.draw(self.screen)
 
         # If the game is inactive, draw the play button.
         if not self.stats.game_run:
             self.play_button.draw_button()
+
+        # Drae the score board.
+        self.sb.show_score()
 
         # Update the surface
         pygame.display.flip()
@@ -187,13 +191,27 @@ class AlienInvasion:
     def check_bullet_ufo_collisions(self):
         """Respond to collisions."""
         # Check if the bullet hit an ufo, get rid of the ufo if so.
-        pygame.sprite.groupcollide(self.bullets, self.ufos, True, True)
+        collisions = pygame.sprite.groupcollide(self.bullets, self.ufos, True, True)
+
+        if collisions:
+            # Each value is a list of ufos hit by a single bullet
+            for ufo_lst in collisions.values():
+                self.stats.score += self.settings.ufo_points * len(ufo_lst)
+            
+            # Update the image of new score/high score.
+            self.sb.prep_score()
+            self.sb.check_high_score()
 
         # If ufos are all destroyed
         if not self.ufos:
             # Get rid of eisiting bullets and create new fleet.
             self.bullets.empty()
             self.create_fleet()
+            
+            # Level up
+            self.stats.level += 1
+            # Update the image of new level
+            self.sb.prep_level()
 
             self.settings.ufo_level_up()            
             self.settings.ship_level_up()
@@ -209,6 +227,7 @@ class AlienInvasion:
 
             # Create a new fleet and center the ship.
             self.create_fleet()
+            self.sb.prep_ships()
             self.ship.center_ship()
 
             # Pause.
@@ -225,10 +244,17 @@ class AlienInvasion:
                 self.ship_hit()
                 break
 
-    def start_the_game(self):
+    def start_new_game(self):
         # Reset the game statistics.
         self.stats.reset_stats()
         self.stats.game_run = True
+
+        # Reset the image of scoreboard
+        self.sb.prep_score()
+        self.sb.prep_level()
+        self.sb.prep_ships()
+
+        # Reset the ufos and bullets
         self.ufos.empty()
         self.bullets.empty()
         

@@ -28,5 +28,5 @@ class Ufo(Sprite):
     def is_hit_edges(self):
         """Return True if ufo is at edge of screen."""
         screen_rect = self.screen.get_rect()
-        if self.rect.right >= screen_rect.right or self.rect.left <= 0:
+        if self.rect.right >= screen_rect.right - self.rect.width - 10 or self.rect.left <= 0:
             return True

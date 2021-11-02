@@ -8,9 +8,9 @@ class Settings:
         self.bg_color = (0, 0, 0)
         
         self.ship_limit = 3
+
         self.bullet_width = 6
         self.bullet_stored = 10
-
         self.bullet_height = 15
         self.bullet_color = (200, 60, 60)
         
@@ -25,11 +25,14 @@ class Settings:
         # Bullet settings
         self.bullet_speed = 5.0
         self.bullet_width = 6
-        self.bullet_stored = 10
+        self.bullet_stored = 3
         
         # Ufo settings
         self.ufo_speed = 2
         self.fleet_drop_speed = 5
+
+        # Scoring
+        self.ufo_points = 750
 
     def ship_level_up(self):
         """Ship becomes stronger."""
@@ -42,9 +45,9 @@ class Settings:
         self.ship_speed += self.ship_increase_speed
 
         # Bullet improved settings
-        self.bullet_increase_width = 2
+        self.bullet_increase_width = 1.75
         self.bullet_increase_store = 1
-        self.bullet_increase_speed = 1.0
+        self.bullet_increase_speed = 1
 
         self.bullet_width *= self.bullet_increase_width
         self.bullet_stored += self.bullet_increase_store
@@ -52,8 +55,10 @@ class Settings:
 
     def ufo_level_up(self):
         """Ufos become stronger."""
-        self.ufo_increase_speed = self.ufo_speed * 1.02
-        self.fleet_increase_drop_speed = self.fleet_drop_speed * 1.02
+        self.ufo_increase_speed = 1
+        self.fleet_increase_drop_speed = 5
+        self.ufo_increase_points = 1.5
 
         self.fleet_drop_speed += self.fleet_increase_drop_speed
         self.ufo_speed += self.ufo_increase_speed
+        self.ufo_points *= self.ufo_increase_points

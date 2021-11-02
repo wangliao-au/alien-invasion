@@ -1,11 +1,13 @@
-from sys import flags
-from time import sleep
 import pygame
+from pygame.sprite import Sprite
 
-class Ship:
+class Ship(Sprite):
     """A class to manage the ship."""
     def __init__(self, ai_game):
         """Initialize the ship and set its starting position."""
+        # Make Ship inherit from Sprite so we can create a group of ships:
+        super().__init__()
+
         # Assign the screen
         self.screen = ai_game.screen
         self.settings = ai_game.settings
@@ -21,7 +23,7 @@ class Ship:
         # Start each new ship at the bottom center of the screen.
         self.rect.midbottom = self.screen_rect.midbottom
     
-        # Store a float value for the ship's horizontal position.
+        # Store the ship's position.
         self.horizon = float(self.rect.x)
         self.vertical = float(self.rect.y)
 
@@ -33,7 +35,7 @@ class Ship:
 
     def update(self):
         """Update the ship's position based on the movement flag."""
-        # Update the ship's x value
+        # Update the ship's x,y with the speed
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.horizon += self.settings.ship_speed
         if self.moving_left and self.rect.left > 0:
@@ -43,7 +45,7 @@ class Ship:
         if self.moving_up and self.rect.top > 0:
             self.vertical -= self.settings.ship_speed
 
-        # Update rect object from self.x
+        # Update the ship's position using the updated coordinate
         self.rect.x = self.horizon
         self.rect.y = self.vertical
 
