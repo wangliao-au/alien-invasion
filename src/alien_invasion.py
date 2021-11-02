@@ -2,16 +2,13 @@
 Written by https://github.com/lia0wang on 01/11/2021
 Powered and inspired by <Python Crash Course>
 """
-import sys
+import pygame
 
 from setting import Settings
 from ship import Ship
-from bullet import Bullet
+from helper import Helper
 
-import pygame
-from pygame.constants import NOFRAME
-
-class AlienInvasion:
+class AlienInvasion(Helper):
     """Overall class to manage game assets and behavior"""
     def __init__(self):
         """Initialize the game and create fame resources"""
@@ -36,68 +33,8 @@ class AlienInvasion:
         while True:
             self.check_events()
             self.ship.update()
-            self.bullets.update()
-            self.delete_out_screen_bullets()
+            self.update_bullets()
             self.update_screen()
-
-    def check_events(self):
-        """Respond to keypresses and mouse events."""
-        for event in pygame.event.get():
-            self.check_quit_event(event)
-            if event.type == pygame.KEYDOWN:
-                self.check_keydown_events(event)
-            elif event.type == pygame.KEYUP:
-                self.check_keyup_events(event)
-
-    def check_quit_event(self, event):
-        """Response to quit command"""
-        if event.type == pygame.QUIT:
-                sys.exit()
-
-    def check_keydown_events(self, event):
-        """Response to key press"""
-        # Use elif since we only check the condition of one key each time
-        if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = True
-        elif event.key == pygame.K_LEFT:
-            self.ship.moving_left = True
-        elif event.key == pygame.K_q:
-            sys.exit()
-        elif event.key == pygame.K_SPACE:
-            self.fire_bullet()
-
-    def check_keyup_events(self, event):
-        """Response to key up"""
-        # Use elif since we only check the condition of one key each time
-        if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = False
-        elif event.key == pygame.K_LEFT:
-            self.ship.moving_left = False
-
-    def fire_bullet(self):
-        """Create a new bullet and add it to the bullets group."""
-        if len(self.bullets) < self.settings.bullet_stored:
-            new_bullet = Bullet(self)
-            self.bullets.add(new_bullet)
-
-    def delete_out_screen_bullets(self):
-        """An approch to remove the out-screen bullets."""
-        for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-                self.bullets.remove(bullet)
-        # print(len(self.bullets)) To see the bullets being removed.
-
-    def update_screen(self):
-        """Update the screen"""
-        # Redraw the screen with background color
-        self.screen.fill(self.settings.bg_color)
-        # Draw the ship, at the current location
-        self.ship.blitme()
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
-
-        # Update the surface
-        pygame.display.flip()
 
 if __name__ == '__main__':
     # Make a game instance and run the game.

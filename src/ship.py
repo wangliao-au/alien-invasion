@@ -1,4 +1,3 @@
-from sys import flags
 import pygame
 
 class Ship:
