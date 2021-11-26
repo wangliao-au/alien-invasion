@@ -1,5 +1,5 @@
 # Alien-Invasion
-  A simple game project in python with pygame, inspiried by  **Python Crash Course**
+  A game project in python with pygame, inspiried by  **Python Crash Course**
   
 ## Demo
 
